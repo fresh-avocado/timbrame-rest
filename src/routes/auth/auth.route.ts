@@ -3,13 +3,19 @@ import { SignInSchema, SignUpSchema } from './auth.schema'
 import { ResponseSchema } from '../../utils/error.schema'
 import { COOKIE_OPTIONS } from '../../utils/constants'
 import { isAuthenticated } from '../../middleware/auth.middleware'
+import { ExampleModel } from '../../models/models'
 
 export const authPath = '/auth'
 
 const routes = async (server: FastifyInstance): Promise<void> => {
 
-  server.post('/signIn', { schema: { body: SignInSchema, response: { 200: ResponseSchema } } }, (req, res) => {
-    res.code(200).setCookie('sessionId', 'my session id', COOKIE_OPTIONS).send({ msg: 'Sign In' })
+  server.post('/signIn', { schema: { body: SignInSchema, response: { 200: ResponseSchema } } }, async (req, res) => {
+
+    const allExamples = await ExampleModel.findAll()
+
+    server.log.info(`allExamples: ${JSON.stringify(allExamples, null, 2)}`)
+
+    return res.code(200).setCookie('sessionId', 'my session id', COOKIE_OPTIONS).send({ msg: 'Sign In' })
   })
 
   server.post('/signUp', { schema: { body: SignUpSchema, response: { 201: ResponseSchema } } }, (req, res) => {

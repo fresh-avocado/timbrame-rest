@@ -4,7 +4,7 @@ import fastifyCookie from '@fastify/cookie'
 import envService from './services/envService'
 import configService from './services/configService'
 import authRoutes, { authPath } from './routes/auth/auth.route'
-import { Server } from 'tls'
+import mongoose from 'mongoose'
 
 const server = fastify({
   logger: configService.getLoggerConfig(),
@@ -25,16 +25,17 @@ server.get('/ping', async (request, reply) => {
   return 'pong\n'
 })
 
-server.listen({ port: envService.getNumber('PORT'), host: configService.getAddress() }, (err, address) => {
-  if (err) {
-    server.log.error(err)
-    process.exit(1)
-  }
-  server.log.info(`Server listening at ${address}`)
-})
-
-declare module "fastify" {
-  interface FastifyInstance {
-    io: Server;
+const start = async () => {
+  try {
+    const [address,] = await Promise.all([
+      server.listen({ port: envService.getNumber('PORT'), host: configService.getAddress() }),
+      mongoose.connect(envService.getString('MONGO_CONN'))
+    ])
+    server.log.info(`Server listening at ${address} 👂`)
+    server.log.info('Connected to MongoDB 🔌')
+  } catch (error) {
+    server.log.error(error)
   }
 }
+
+start()
