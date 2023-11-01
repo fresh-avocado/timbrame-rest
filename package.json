@@ -6,7 +6,7 @@
     "scripts": {
         "build": "tsc -p tsconfig.json",
         "start": "node ./dist/index.js",
-        "dev": "nodemon -e ts --watch './src/**/*.ts' --exec 'ts-node ./src/index.ts'",
+        "dev": "nodemon -e ts --watch './src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register ./src/index.ts'",
         "lint": "eslint --fix --ext .ts .",
         "postinstall": "husky install"
     },
@@ -15,15 +15,18 @@
         "@fastify/type-provider-typebox": "^3.5.0",
         "@sinclair/typebox": "^0.31.18",
         "@typegoose/typegoose": "^11.6.0",
+        "bcrypt": "^5.1.1",
         "dotenv": "^16.3.1",
         "fastify": "^4.24.3",
         "mongoose": "^7.6.3",
+        "tsconfig-paths": "^4.2.0",
         "validator": "^13.11.0"
     },
     "devDependencies": {
         "@commitlint/cli": "^18.0.0",
         "@commitlint/config-conventional": "^18.0.0",
-        "@types/node": "^20.8.7",
+        "@types/bcrypt": "^5.0.1",
+        "@types/node": "^20.8.10",
         "@types/validator": "^13.11.5",
         "@typescript-eslint/eslint-plugin": "^6.4.0",
         "@typescript-eslint/parser": "^6.8.0",

@@ -6,3 +6,5 @@ export const COOKIE_OPTIONS: CookieSerializeOptions = {
   signed: true,
   sameSite: 'lax',
 }
+
+export const SALT_ROUNDS = 10;

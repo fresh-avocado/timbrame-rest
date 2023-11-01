@@ -17,16 +17,19 @@ type ThisModel = ReturnModelType<typeof User>;
 })
 export class User {
   @prop({ type: Schema.Types.String, required: true })
-  public name!: string
-
-  @prop({ type: Schema.Types.String, required: true, validate: [isEmail, 'Email inválido'] })
-  public email!: string
+  public firstName!: string
 
   @prop({ type: Schema.Types.String, required: true })
+  public lastName!: string
+
+  @prop({ type: Schema.Types.String, unique: true, required: true, validate: [isEmail, 'Email inválido'] })
+  public email!: string
+
+  @prop({ type: Schema.Types.String, unique: true, required: true })
   public username!: string;
 
   @prop({ type: Schema.Types.String, required: true })
-  public password!: string; 
+  public password!: string;
 
   @prop({ type: () => Number }, PropType.MAP)
   public stats!: Map<string, number>
@@ -36,6 +39,24 @@ export class User {
 
   static async insert(this: ThisModel, newDoc: Partial<User>) {
     return await new UserModel(newDoc).save();
+  }
+
+  static async findByEmail(this: ThisModel, email: string) {
+    return await this.findOne({ email }).lean();
+  }
+
+  static async findByUsername(this: ThisModel, username: string) {
+    return await this.findOne({ username }).lean();
+  }
+
+  static async isDuplicateEmail(this: ThisModel, email: string) {
+    const res = await this.findOne({ email }).lean().select('_id')
+    return res !== null;
+  }
+
+  static async isDuplicateUsername(this: ThisModel, username: string) {
+    const res = await this.findOne({ username }).lean().select('_id')
+    return res !== null;
   }
 
   static async findAll(this: ThisModel) {
