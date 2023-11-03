@@ -5,11 +5,16 @@ import envService from './services/envService'
 import configService from './services/configService'
 import authRoutes, { authPath } from './routes/auth/auth.route'
 import mongoose from 'mongoose'
+import fastifyCors from '@fastify/cors'
 
 const server = fastify({
   logger: configService.getLoggerConfig(),
 })
 
+server.register(fastifyCors, {
+  credentials: true,
+  origin: envService.isProd() ? 'TODO PROD FRONT URL' : 'http://127.0.0.1:3000',
+})
 server.register(fastifyCookie, {
   secret: envService.getString('COOKIE_SECRET'),
   parseOptions: {
@@ -18,6 +23,7 @@ server.register(fastifyCookie, {
     signed: true,
     sameSite: 'lax',
   },
+  algorithm: 'sha512',
 })
 server.register(authRoutes, { prefix: authPath })
 

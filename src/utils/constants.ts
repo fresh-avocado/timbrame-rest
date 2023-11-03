@@ -5,6 +5,9 @@ export const COOKIE_OPTIONS: CookieSerializeOptions = {
   secure: true,
   signed: true,
   sameSite: 'lax',
+  maxAge: 24 * 60 * 60 * 1000,
+  domain: '127.0.0.1',
+  path: '/'
 }
 
 export const SALT_ROUNDS = 10;
