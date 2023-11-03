@@ -6,6 +6,7 @@ import configService from './services/configService'
 import authRoutes, { authPath } from './routes/auth/auth.route'
 import mongoose from 'mongoose'
 import fastifyCors from '@fastify/cors'
+import redisService from './services/redisService'
 
 const server = fastify({
   logger: configService.getLoggerConfig(),
@@ -35,10 +36,12 @@ const start = async () => {
   try {
     const [address,] = await Promise.all([
       server.listen({ port: envService.getNumber('PORT'), host: configService.getAddress() }),
-      mongoose.connect(envService.getString('MONGO_CONN'))
+      mongoose.connect(envService.getString('MONGO_CONN')),
+      redisService.connect(),
     ])
     server.log.info(`Server listening at ${address} 👂`)
     server.log.info('Connected to MongoDB 🔌')
+    server.log.info('Connected to Redis 🔴')
   } catch (error) {
     server.log.error(error)
   }
