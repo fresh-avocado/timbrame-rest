@@ -1,5 +1,5 @@
-import { PropType, ReturnModelType, Ref, modelOptions, prop } from "@typegoose/typegoose";
-import { Schema } from "mongoose";
+import { PropType, ReturnModelType, Ref, modelOptions, prop, DocumentType } from "@typegoose/typegoose";
+import { FlattenMaps, Schema, Types } from "mongoose";
 import isEmail from 'validator/lib/isEmail'
 import { UserModel } from "./models";
 
@@ -63,3 +63,6 @@ export class User {
     return await this.find().lean();
   }
 }
+
+export type UserDocument = DocumentType<User>;
+export type UserLeanDocument = FlattenMaps<User> & { _id: Types.ObjectId };

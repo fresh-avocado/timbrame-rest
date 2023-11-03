@@ -11,3 +11,5 @@ export const COOKIE_OPTIONS: CookieSerializeOptions = {
 }
 
 export const SALT_ROUNDS = 10;
+
+export const SESSION_MAX_AGE = 300; // 5 minutes

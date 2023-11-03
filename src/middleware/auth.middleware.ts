@@ -1,21 +1,35 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import redisService, { TimbrameSession } from "src/services/redisService";
+import { COOKIE_OPTIONS } from "src/utils/constants";
+
+declare module 'fastify' {
+  interface FastifyRequest {
+    session: TimbrameSession
+  }
+}
 
 export const isAuthenticated = (server: FastifyInstance) => {
-  return (req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+  return async (req: FastifyRequest, res: FastifyReply) => {
     server.log.info(`session cookie '${req.cookies.sessionId}' from ${req.ip}`)
 
     if (!req.cookies.sessionId) {
       server.log.error(`unauthenticated request from ${req.ip}`)
-      reply.code(403).send({ msg: 'Unauthenticated' })
+      res.code(403).send({ msg: 'Unauthenticated' })
     }
 
     const unsignedCookie = server.unsignCookie(req.cookies.sessionId as string)
 
-    if (unsignedCookie.valid === false) {
+    if (unsignedCookie.valid === false || unsignedCookie.value === null) {
       server.log.error(`tampered cookie request from ${req.ip}`)
-      reply.code(403).send({ msg: 'Malformed cookie' })
+      return res.code(403).send({ msg: 'Malformed cookie' })
     }
 
-    done()
+    const session = await redisService.getSession(unsignedCookie.value as string)
+
+    if (session === null) {
+      return res.code(404).clearCookie('sessionId', COOKIE_OPTIONS).send({ msg: 'Sesión expiró' })
+    }
+
+    req.session = session
   }
 }
