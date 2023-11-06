@@ -48,7 +48,7 @@ export class User {
   static async findByUsername(this: ThisModel, username: string) {
     return await this.findOne({ username }).lean();
   }
-
+  
   static async isDuplicateEmail(this: ThisModel, email: string) {
     const res = await this.findOne({ email }).lean().select('_id')
     return res !== null;
