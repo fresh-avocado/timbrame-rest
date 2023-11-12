@@ -11,9 +11,25 @@ class RedisService {
   private client!: ReturnType<typeof createClient>
 
   async connect() {
-    this.client = await createClient({
-      url: envService.getString('REDIS_CONN'),
-    }).on('error', (err) => console.log('Error connecting to Redis client: ', err)).connect()
+    return new Promise<void>((resolve, reject) => {
+      createClient({
+        password: envService.getString('REDIS_PASSWORD'),
+        socket: {
+          host: envService.getString('REDIS_HOST'),
+          port: envService.getNumber('REDIS_PORT'),
+        },
+      }).on('error', (err) => {
+        console.log('Error connecting to Redis client: ', err)
+        reject()
+      }).connect().then((value) => {
+        this.client = value;
+        resolve();
+      }).catch((err) => {
+        console.log('Error connecting to Redis client: ', err)
+        reject();
+      })
+    })
+
   }
 
   async createSession({ _id, username }: Pick<UserLeanDocument, '_id' | 'username'>) {

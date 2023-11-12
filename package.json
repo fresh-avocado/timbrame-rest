@@ -5,12 +5,13 @@
     "license": "MIT",
     "scripts": {
         "build": "tsc -p tsconfig.json",
-        "start": "node ./dist/index.js",
+        "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/index.js",
         "dev": "nodemon -e ts --watch './src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register ./src/index.ts'",
         "lint": "eslint --fix --ext .ts .",
         "postinstall": "husky install"
     },
     "dependencies": {
+        "@aws-sdk/client-cloudwatch-logs": "^3.449.0",
         "@fastify/cookie": "^9.1.0",
         "@fastify/cors": "^8.4.1",
         "@fastify/type-provider-typebox": "^3.5.0",
