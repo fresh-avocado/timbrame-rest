@@ -1,4 +1,4 @@
-
+dist
 .env*
 .flaskenv*
 !.env.project

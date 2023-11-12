@@ -6,6 +6,7 @@ import { isAuthenticated } from '../../middleware/auth.middleware'
 import { UserModel } from '../../models/models'
 import passwordService from 'src/services/passwordService'
 import redisService from 'src/services/redisService'
+import logService from 'src/services/logService'
 
 export const authPath = '/auth'
 
@@ -22,8 +23,10 @@ const routes = async (server: FastifyInstance): Promise<void> => {
 
     if (samePassword) {
       const sessionId = await redisService.createSession(user)
+      logService.sendLog({ breach: false, msg: 'user signIn successfull' })
       return res.code(200).setCookie('sessionId', sessionId, COOKIE_OPTIONS).send({ msg: '¡Sesión iniciada!' })
     } else {
+      logService.sendLog({ breach: true, msg: `wrong username or password from ip: ${req.ip}` })
       return res.code(404).send({ msg: 'Username o contraseña inválida.' })
     }
   })

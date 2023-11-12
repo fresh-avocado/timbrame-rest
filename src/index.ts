@@ -48,3 +48,5 @@ const start = async () => {
 }
 
 start()
+
+export const logger = server.log
