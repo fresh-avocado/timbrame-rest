@@ -4,6 +4,7 @@ import fastifyCookie from '@fastify/cookie'
 import envService from './services/envService'
 import configService from './services/configService'
 import authRoutes, { authPath } from './routes/auth/auth.route'
+import prometheusRoutes, { prometheusPath } from './routes/prometheus/prometheus.route'
 import mongoose from 'mongoose'
 import fastifyCors from '@fastify/cors'
 import redisService, { TimbrameSession } from './services/redisService'
@@ -34,6 +35,7 @@ server.register(fastifyCookie, {
   algorithm: 'sha512',
 })
 server.register(authRoutes, { prefix: authPath })
+server.register(prometheusRoutes, { prefix: prometheusPath })
 
 server.get('/ping', async (request, reply) => {
   return 'pong\n'

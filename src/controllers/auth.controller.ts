@@ -5,6 +5,7 @@ import logService from "src/services/logService"
 import passwordService from "src/services/passwordService"
 import redisService from "src/services/redisService"
 import { COOKIE_OPTIONS } from "src/utils/constants"
+import prom from 'src/services/prometheusService'
 
 export const signIn = async (req: FastifyRequest<{ Body: SignInType }>, res: FastifyReply) => {
   const user = await UserModel.findByUsername(req.body.username)
@@ -18,6 +19,7 @@ export const signIn = async (req: FastifyRequest<{ Body: SignInType }>, res: Fas
 
   if (samePassword) {
     const sessionId = await redisService.createSession(user)
+    prom.signIns.inc();
     logService.sendLog({ device: req.userAgent, sus: false, msg: `${user.username} signed in successfully` })
     return res.code(200).setCookie('sessionId', sessionId, COOKIE_OPTIONS).send({ msg: '¡Sesión iniciada!' })
   } else {
@@ -51,6 +53,7 @@ export const signUp = async (req: FastifyRequest<{ Body: SignUpType }>, res: Fas
   })
 
   const sessionId = await redisService.createSession({ _id: newUser._id, username: newUser.username })
+  prom.signUps.inc();
   logService.sendLog({ device: req.userAgent, msg: `${newUser.username} signed up successfully` })
   return res.code(200).setCookie('sessionId', sessionId, COOKIE_OPTIONS).send({ msg: '¡Cuenta creada!' })
 }
@@ -58,5 +61,6 @@ export const signUp = async (req: FastifyRequest<{ Body: SignUpType }>, res: Fas
 export const logOut = async (req: FastifyRequest, res: FastifyReply) => {
   // TODO: delete Redis session?
   logService.sendLog({ device: req.userAgent, msg: `${req.session.username} logged out successfully` })
+  prom.logOuts.inc();
   return res.code(200).clearCookie('sessionId', COOKIE_OPTIONS).send({ msg: 'Sesión cerrada' })
 }
