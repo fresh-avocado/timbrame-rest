@@ -8,6 +8,7 @@ import prometheusRoutes, { prometheusPath } from './routes/prometheus/prometheus
 import mongoose from 'mongoose'
 import fastifyCors from '@fastify/cors'
 import redisService, { TimbrameSession } from './services/redisService'
+import { COOKIE_OPTIONS } from './utils/constants'
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -22,22 +23,17 @@ const server = fastify({
 
 server.register(fastifyCors, {
   credentials: true,
-  origin: envService.isProd() ? 'TODO PROD FRONT URL' : 'http://127.0.0.1:3000',
+  origin: envService.isProd() ? 'TODO PROD FRONT URL' : 'http://0.0.0.0:3000',
 })
 server.register(fastifyCookie, {
   secret: envService.getString('COOKIE_SECRET'),
-  parseOptions: {
-    httpOnly: true,
-    secure: true,
-    signed: true,
-    sameSite: 'lax',
-  },
+  parseOptions: COOKIE_OPTIONS,
   algorithm: 'sha512',
 })
 server.register(authRoutes, { prefix: authPath })
 server.register(prometheusRoutes, { prefix: prometheusPath })
 
-server.get('/ping', async (request, reply) => {
+server.get('/ping', async () => {
   return 'pong\n'
 })
 

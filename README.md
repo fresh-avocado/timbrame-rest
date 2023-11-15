@@ -4,6 +4,8 @@ Microservicio encargado de manejar los usuarios de Tímbrame, las solicitudes de
 
 # Setup
 
+## `.env`
+
 Correr el _setup_ (solo necesario una sola vez):
 
 ```bash
@@ -27,3 +29,21 @@ Finalmente, correr con:
 ```bash
 yarn dev
 ```
+
+## Docker
+
+### Para desarrollo:
+
+Buildear la imagen:
+
+```bash
+docker build -t timbrame-rest:1.0 -f ./Dockerfile.dev .
+```
+
+Correr el contenedor:
+
+```bash
+docker run -p 8081:8081 timbrame-rest:1.0
+```
+
+Entrar al contenedor desde VS Code, cambiar el código y commitear al repo desde ahí.
