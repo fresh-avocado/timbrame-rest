@@ -6,7 +6,14 @@ import configService from './services/configService'
 import authRoutes, { authPath } from './routes/auth/auth.route'
 import mongoose from 'mongoose'
 import fastifyCors from '@fastify/cors'
-import redisService from './services/redisService'
+import redisService, { TimbrameSession } from './services/redisService'
+
+declare module 'fastify' {
+  interface FastifyRequest {
+    session: TimbrameSession
+    userAgent: string
+  }
+}
 
 const server = fastify({
   logger: configService.getLoggerConfig(),
@@ -30,6 +37,11 @@ server.register(authRoutes, { prefix: authPath })
 
 server.get('/ping', async (request, reply) => {
   return 'pong\n'
+})
+
+server.addHook('preHandler', (req, res, done) => {
+  req.userAgent = req.headers['user-agent'] ?? 'none detected'
+  done()
 })
 
 const start = async () => {

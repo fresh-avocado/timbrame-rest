@@ -2,12 +2,6 @@ import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction 
 import redisService, { TimbrameSession } from "src/services/redisService";
 import { COOKIE_OPTIONS } from "src/utils/constants";
 
-declare module 'fastify' {
-  interface FastifyRequest {
-    session: TimbrameSession
-  }
-}
-
 export const isAuthenticated = (server: FastifyInstance) => {
   return async (req: FastifyRequest, res: FastifyReply) => {
     server.log.info(`session cookie '${req.cookies.sessionId}' from ${req.ip}`)
