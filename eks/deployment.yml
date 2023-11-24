@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: timbrame-rest-deployment
+    labels:
+        app: timbrame-rest
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: timbrame-rest
+    template:
+        metadata:
+            labels:
+                app: timbrame-rest
+        spec:
+            containers:
+                - name: timbrame-rest
+                  image: 075023825271.dkr.ecr.sa-east-1.amazonaws.com/timbrame-rest:2a73187695c0749bb1e508138e3a4603c638c207
+                  ports:
+                      - containerPort: 8081
