@@ -19,3 +19,9 @@ spec:
                   image: 075023825271.dkr.ecr.sa-east-1.amazonaws.com/timbrame-rest:2a73187695c0749bb1e508138e3a4603c638c207
                   ports:
                       - containerPort: 8081
+                  env:
+                      - name: 'DOTENV_KEY'
+                        valueFrom:
+                            secretKeyRef:
+                                name: dotenv-vault-secret
+                                key: 'DOTENV_KEY'
