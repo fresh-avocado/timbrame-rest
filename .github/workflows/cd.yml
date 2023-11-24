@@ -38,6 +38,7 @@ jobs:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                   ECR_REPOSITORY: timbrame-rest
                   IMAGE_TAG: ${{ github.sha }}
+                  DOTENV_KEY: ${{ secrets.DOTENV_KEY }}
               run: |
                   docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
                   docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
