@@ -6,7 +6,7 @@ on:
 
 jobs:
     deploy:
-        name: Build image
+        name: Build Backend Image and Push it to ECR
         runs-on: ubuntu-latest
 
         steps:
