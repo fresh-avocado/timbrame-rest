@@ -49,6 +49,7 @@ const start = async () => {
       mongoose.connect(envService.getString('MONGO_CONN')),
       redisService.connect(),
     ])
+    server.log.info(`${JSON.stringify(process.env, null, 2)}`)
     server.log.info(`Server listenin' at ${address} 👂`)
     server.log.info('Connected to MongoDB 🔌')
     server.log.info('Connected to Redis 🔴')
