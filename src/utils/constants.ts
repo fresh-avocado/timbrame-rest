@@ -9,7 +9,7 @@ export const COOKIE_OPTIONS: CookieSerializeOptions = {
   signed: true,
   sameSite: 'lax',
   maxAge: SESSION_MAX_AGE,
-  domain: '0.0.0.0',
+  domain: envService.isProd() ? '.gabrielspranger.com' : '0.0.0.0',
   path: '/'
 }
 
