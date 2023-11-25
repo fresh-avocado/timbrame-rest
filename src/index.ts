@@ -23,7 +23,7 @@ const server = fastify({
 
 server.register(fastifyCors, {
   credentials: true,
-  origin: envService.isProd() ? 'https://gabrielspranger.com' : 'http://0.0.0.0:3000',
+  origin: envService.isProd() ? 'https://www.gabrielspranger.com' : 'http://0.0.0.0:3000',
 })
 server.register(fastifyCookie, {
   secret: envService.getString('COOKIE_SECRET'),
