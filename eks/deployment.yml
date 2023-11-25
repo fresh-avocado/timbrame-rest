@@ -16,7 +16,8 @@ spec:
         spec:
             containers:
                 - name: timbrame-rest
-                  image: 075023825271.dkr.ecr.sa-east-1.amazonaws.com/timbrame-rest:a55d04312917403d88eb2aec5398c50f0c9ac288
+                  image: 075023825271.dkr.ecr.sa-east-1.amazonaws.com/timbrame-rest:latest
+                  imagePullPolicy: Always # prevent using stale 'latest' local copies
                   ports:
                       - containerPort: 8081
                   env:
