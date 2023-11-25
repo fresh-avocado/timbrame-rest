@@ -47,3 +47,13 @@ docker run -p 8081:8081 timbrame-rest:1.0
 ```
 
 Entrar al contenedor desde VS Code, cambiar el código y commitear al repo desde ahí.
+
+
+# AWS Pricing
+El precio para las instancias de EC2 esta relacionado con el tipo de instancia elegido (c1.medium, c1.large, t2.small, etc).
+
+|         **Operacion**        | **Costo ($)** |
+|:----------------------------:|:-------------:|
+| Amazon EKS cluster (Create)  |          0.95 |
+| EC2 BottleRocket (c1.medium) |       0.179/h |
+| EC2 BottleRocket (c3.large)  |       0.163/h |
