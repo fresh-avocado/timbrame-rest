@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: timbrame-rest-service
+spec:
+    type: ClusterIP
+    selector: # pod selector to which this service refers to
+        app: timbrame-rest
+    ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 8081
+          name: http
